@@ -29,11 +29,7 @@ async function loadProjects() {
 
     try {
 
-        /*
-         * Replace this URL with your LIVE API URL
-         * after we deploy the backend.
-         */
-
+        // Connect to the live Render backend
         const response = await fetch(
             "https://personal-portfolio-4sbb.onrender.com/api/projects"
         );
@@ -58,6 +54,13 @@ async function loadProjects() {
                 <p>
                     ${project.description}
                 </p>
+
+                <p>
+                    <strong>Technologies:</strong>
+                    ${project.technologies
+                        ? project.technologies.join(", ")
+                        : ""}
+                </p>
             `;
 
             projectsContainer.appendChild(card);
@@ -67,10 +70,8 @@ async function loadProjects() {
 
         console.error("Unable to load projects:", error);
 
-        /*
-         * Keep the existing projects visible if
-         * the backend is unavailable.
-         */
-
+        projectsContainer.innerHTML = `
+            <p>Unable to load projects right now.</p>
+        `;
     }
 }
