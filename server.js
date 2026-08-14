@@ -14,7 +14,7 @@ let projectsCollection;
 
 async function connectDatabase() {
     if (!MONGODB_URI) {
-        throw new Error("MONGODB_URI is not configured");
+        throw new Error("MONGODB_URI environment variable is missing");
     }
 
     const client = new MongoClient(MONGODB_URI);
@@ -33,13 +33,17 @@ app.get("/", (req, res) => {
 
 app.get("/api/projects", async (req, res) => {
     try {
-        const projects = await projectsCollection
-            .find({})
-            .toArray();
+        if (!projectsCollection) {
+            return res.status(503).json({
+                error: "Database is not connected"
+            });
+        }
+
+        const projects = await projectsCollection.find({}).toArray();
 
         res.json(projects);
     } catch (error) {
-        console.error("Failed to load projects");
+        console.error("Failed to load projects:", error.message);
 
         res.status(500).json({
             error: "Unable to load portfolio projects"
@@ -53,7 +57,11 @@ connectDatabase()
             console.log(`Server running on port ${PORT}`);
         });
     })
-  .catch((error) => {
-    console.error("Database connection failed:", error.message);
-    process.exit(1);
-});
+    .catch((error) => {
+        console.error(
+            "Database connection failed:",
+            error.message
+        );
+
+        process.exit(1);
+    });
