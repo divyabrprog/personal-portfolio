@@ -35,7 +35,7 @@ async function loadProjects() {
          */
 
         const response = await fetch(
-            "YOUR_API_URL/api/projects"
+            "https://personal-portfolio-4sbb.onrender.com/api/projects"
         );
 
         if (!response.ok) {
