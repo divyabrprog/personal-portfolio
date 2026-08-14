@@ -53,7 +53,7 @@ connectDatabase()
             console.log(`Server running on port ${PORT}`);
         });
     })
-    .catch(() => {
-        console.error("Database connection failed");
-        process.exit(1);
-    });
+  .catch((error) => {
+    console.error("Database connection failed:", error.message);
+    process.exit(1);
+});
